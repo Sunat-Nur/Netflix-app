@@ -1,37 +1,58 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import { useColorScheme } from "react-native";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import Colors from "../../constants/Colors";
+import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+    const colorScheme = useColorScheme();
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
+    return (
+        <Tabs
+            screenOptions={{
+                tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: "Browse",
+                    tabBarIcon: ({ color }) => (
+                        <AntDesign name="home" size={24} color={color} />
+                    ),
+                    headerShown: false,
+                }}
+            />
+            <Tabs.Screen
+                name="movies"
+                options={{
+                    title: "Movies",
+                    tabBarIcon: ({ color }) => (
+                        <MaterialIcons name="video-library" size={24} color={color} />
+                    ),
+                    headerShown: false,
+                }}
+            />
+            <Tabs.Screen
+                name="tv"
+                options={{
+                    title: "TV Shows",
+                    tabBarIcon: ({ color }) => (
+                        <Entypo name="tv" size={24} color={color} />
+                    ),
+                    headerShown: false,
+                }}
+            />
+            <Tabs.Screen
+                name="my-list"
+                options={{
+                    title: "My List",
+                    tabBarIcon: ({ color }) => (
+                        <Entypo name="list" size={24} color={color} />
+                    ),
+                    headerShown: false,
+                }}
+            />
+        </Tabs>
+    );
 }
