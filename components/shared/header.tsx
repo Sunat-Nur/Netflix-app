@@ -10,6 +10,11 @@ import {IAccount} from "@/types";
 
 
 export default function Header() {
+
+
+    const router = useRouter();
+
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
@@ -19,8 +24,11 @@ export default function Header() {
                     style={styles.logo}
                 />
 
-                <View style={styles.rightSide}>
-                    <TouchableOpacity activeOpacity={0.5}>
+                <View style={styles.rightSide} >
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={() => router.push("/search")}
+                    >
                         <MaterialIcons
                             name="search"
                             size={30}
@@ -32,7 +40,7 @@ export default function Header() {
                         <Image
                             resizeMode="contain"
                             style={styles.profile}
-                            source={{ uri: "https://tinyurl.com/5n7b72k3"}}
+                            source={{uri: "https://tinyurl.com/5n7b72k3"}}
                         />
                     </TouchableOpacity>
                 </View>
