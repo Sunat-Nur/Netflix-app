@@ -3,7 +3,7 @@ import {Text, View} from "@/components/Themed";
 
 export default function tv () {
     return (
-        <View>
+        <View className="flex-1 items-center justify-center">
             <Text>TV</Text>
         </View>
     )
