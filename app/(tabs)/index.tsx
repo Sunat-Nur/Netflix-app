@@ -26,8 +26,11 @@ export default function Index() {
 
 
     const getTrendingMovies = async () => {
+        setIsLoading(true);
         const trending = await trendingMovies();
         setTrending(trending);
+        setIsLoading(false)
+
     }
 
     const getTopRatedMovies = async () => {
