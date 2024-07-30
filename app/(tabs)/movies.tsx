@@ -5,7 +5,7 @@ import {Text, View} from "@/components/Themed";
 // import Loader from "../../components/shared/loader";
 import {ScrollView, StyleSheet} from "react-native";
 // import Banner from "../../components/shared/banner";
-// import MovieCard from "../../components/card/movie-card";
+// import MovieCard from "../../components/card/card-card";
 
 export default function Movies() {
     // const [comedy, setComedy] = useState<IMovie[]>([]);
@@ -21,18 +21,18 @@ export default function Movies() {
     //
     // const getTrendingMovies = async () => {
     //     setIsLoading(true);
-    //     const comedy = await genreMovies("movie", 35);
+    //     const comedy = await genreMovies("card", 35);
     //     setComedy(comedy);
     //     setIsLoading(false);
     // };
     //
     // const getTopRatedMovies = async () => {
-    //     const documentary = await genreMovies("movie", 99);
+    //     const documentary = await genreMovies("card", 99);
     //     setDocumentary(documentary);
     // };
     //
     // const getPopularMovies = async () => {
-    //     const family = await genreMovies("movie", 10751);
+    //     const family = await genreMovies("card", 10751);
     //     setFamily(family);
     // };
     //
