@@ -1,7 +1,13 @@
-import {Text, View} from "@/components/Themed";
-import {IMovie} from "@/types";
 import {useEffect, useState} from "react";
+import {Text, View} from "../Themed";
+import {IMovie} from "@/types";
 import {Dimensions, ImageBackground, StyleSheet, TouchableOpacity,} from "react-native";
+import {imageOriginal} from "@/lip/api";
+import Header from "./header";
+import {LinearGradient} from "expo-linear-gradient";
+import {Headertabs} from "@/constants";
+import {Feather, Ionicons} from "@expo/vector-icons";
+import {useRouter} from "expo-router";
 
 interface Props {
     movies: IMovie[];
@@ -10,6 +16,8 @@ interface Props {
 export default function Banner({movies}: Props) {
     const [randomMovie, setRandomMovie] = useState<IMovie | null>(null);
 
+    const router = useRouter();
+
     useEffect(() => {
         const movie = movies[Math.floor(Math.random() * movies.length)];
         setRandomMovie(movie);
@@ -17,12 +25,54 @@ export default function Banner({movies}: Props) {
 
 
     return (
-        <View className="flex-1">
-            <Text>Banner</Text>
-        </View>
-    )
+        <ImageBackground
+            source={{uri: `${imageOriginal(randomMovie?.backdrop_path || randomMovie?.poster_path)}`}}
+            style={styles.backgroundWrapper}
+        >
+            <Header/>
+            <LinearGradient
+                colors={["black", "transparent"]}
+                style={styles.infoWrapper}
+                locations={[1, 0]}
+            >
+                <View style={styles.infoContainer}>
+                    {/* Header tab */}
+                    <View style={styles.tabWrapper}>
+                        {Headertabs.map((item) => (
+                            <TouchableOpacity key={item.path} style={styles.tabBtn}>
+                                <Text style={styles.tabText}>{item.name}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                    {/* Movie information */}
+                    <Text style={styles.title}>
+                        {randomMovie?.title || randomMovie?.original_title}
+                    </Text>
+                    <View style={styles.menu}>
+                        <TouchableOpacity style={styles.menuBtn}>
+                            <Ionicons name="add-outline" size={24} color={"white"}/>
+                            <Text style={styles.textButton}>My List</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.playBtn}
+                            onPress={() => router.push(`/movie/${randomMovie?.id}`)}
+                        >
+                            <Ionicons name="play" size={26}/>
+                            <Text style={styles.textButtonPlay}>Play</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.menuBtn}
+                            onPress={() => router.push(`/movie/${randomMovie?.id}`)}
+                        >
+                            <Feather name="info" size={24} color={"white"}/>
+                            <Text style={styles.textButton}>Info</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </LinearGradient>
+        </ImageBackground>
+    );
 }
-
 
 const styles = StyleSheet.create({
     backgroundWrapper: {
