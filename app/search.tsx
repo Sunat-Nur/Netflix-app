@@ -2,9 +2,9 @@ import React, {useCallback, useState} from "react";
 import {Text, View} from "@/components/Themed";
 import {IMovie} from "@/types";
 import {Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity,} from "react-native";
-import {AntDesign, Entypo, FontAwesome} from "@expo/vector-icons";
+import {Entypo, FontAwesome} from "@expo/vector-icons";
 import {useRouter} from "expo-router";
-import {image185, imageOriginal, searchMovies} from "@/lip/api";
+import {imageOriginal, searchMovies} from "@/lip/api";
 import {debounce} from "lodash";
 import Loader from "../components/shared/loader";
 
@@ -35,7 +35,7 @@ export default function Search() {
             <View style={styles.container}>
                 <TextInput
                     onChangeText={handletextDebounce}
-                    placeholder="Search for a movie"
+                    placeholder="Search"
                     placeholderTextColor={"lightgray"}
                     style={styles.input}
                 />
@@ -54,10 +54,10 @@ export default function Search() {
                         <Text style={styles.resultsText}>Results: {results.length}</Text>
                     ) : (
                         <View style={styles.noResults}>
-                            <Entypo name="emoji-sad" size={36} color="white"/>
-                            <Text style={styles.title}>
-                                Sorry, we couldn't find any results
-                            </Text>
+                            {/*<Entypo name="emoji-sad" size={36} color="white"/>*/}
+                            {/*<Text style={styles.title}>*/}
+                            {/*    Sorry, we couldn't find any results*/}
+                            {/*</Text>*/}
                         </View>
                     )}
 
