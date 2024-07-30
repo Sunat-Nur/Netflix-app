@@ -31,7 +31,7 @@ export default function Search() {
     const handletextDebounce = useCallback(debounce(handleSearch, 500), []);
 
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView className={"flex-1"}>
             <View style={styles.container}>
                 <TextInput
                     onChangeText={handletextDebounce}
