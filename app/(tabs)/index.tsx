@@ -8,7 +8,7 @@ import MovieCard from "@/components/card/movie-card";
 import Loader from "../../components/shared/loader";
 import {isLoading} from "expo-font";
 import {Redirect, useRouter} from "expo-router";
-// import { useGlobalContext } from "../../context";
+import {useGlobalContext} from "@/context";
 
 export default function Index() {
     const [trending, setTrending] = useState<IMovie[]>([]);
@@ -16,7 +16,7 @@ export default function Index() {
     const [popular, setPopular] = useState<IMovie[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // const { user, account } = useGlobalContext();
+    const {user, account} = useGlobalContext();
 
     useEffect(() => {
         getTrendingMovies();
@@ -45,8 +45,8 @@ export default function Index() {
 
 
     if (isLoading) return <Loader/>;
-    // if (user === null) return <Redirect href={"/auth"} />;
-    // if (account === null) return <Redirect href={"/account"} />;
+    if (user === null) return <Redirect href={"/auth"}/>;
+    if (account === null) return <Redirect href={"/account"}/>;
 
     return (
         <ScrollView>
