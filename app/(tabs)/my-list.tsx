@@ -1,20 +1,27 @@
-import {Link, useRouter} from "expo-router";
-import {Dimensions, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity} from "react-native";
-import {Text, View} from "@/components/Themed";
-import {useEffect, useState} from "react";
-import {IList} from "@/types";
-import {useGlobalContext} from "@/context";
-import {getAllLists} from "@/lip/firebase";
+import { Link, useRouter } from "expo-router";
+import {
+    Dimensions,
+    Image,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+} from "react-native";
+import { Text, View } from "@/components/Themed";
+import { useEffect, useState } from "react";
+import { IList } from "@/types";
+import { useGlobalContext } from "@/context";
+import { getAllLists } from "@/lip/firebase";
 import Loader from "../../components/shared/loader";
-import {imageOriginal} from "@/lip/api";
+import { imageOriginal } from "@/lip/api";
 
-const {width, height} = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default function MyList() {
     const [isLoading, setIsLoading] = useState(false);
     const [movies, setMovies] = useState<IList[]>([]);
 
-    const {account} = useGlobalContext();
+    const { account } = useGlobalContext();
     const router = useRouter();
 
     useEffect(() => {
@@ -33,7 +40,7 @@ export default function MyList() {
         }
     };
 
-    if (isLoading) return <Loader/>;
+    if (isLoading) return <Loader />;
 
     return (
         <>
@@ -48,7 +55,7 @@ export default function MyList() {
             ) : (
                 <ScrollView
                     refreshControl={
-                        <RefreshControl refreshing={isLoading} onRefresh={getLists}/>
+                        <RefreshControl refreshing={isLoading} onRefresh={getLists} />
                     }
                 >
                     <View className="flex-1">
