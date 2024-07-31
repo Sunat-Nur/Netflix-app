@@ -36,14 +36,18 @@ Users can add movies and TV shows to their personal list for easy access and fut
 **Responsive Design:**
 Built with responsive design principles to ensure usability on various devices including desktops, tablets, and smartphones.
 
-##Technologies Used
+## Technologies Used
 
 **Frontend:**
 
 **React Native:** The core framework used for building the user interface.
+
 **Expo:** Managed workflow to streamline the development and deployment process.
+
 **TailwindCSS:** For styling the components with utility-first CSS framework.
+
 **Axios:** For making HTTP requests to fetch data from the API.
+
 **React Navigation:** For navigation and routing within the app.
 
 
@@ -53,12 +57,16 @@ Built with responsive design principles to ensure usability on various devices i
 
 
 **Firebase:** Used for authentication, real-time database, and cloud storage.
+
 **API Integration:** Integration with external APIs to fetch movie and TV show data.
+
 **State Management:**
 **Context API:** For managing global state across the application.
+
 **Validation:**
 **Yup and Formik:** For form validation and handling form state.
-**Code Structure**
+
+
 **Authentication:**
 **auth.tsx:** Handles the authentication logic including sign-in and sign-up processes.login-account.tsx and create-account.tsx: UI components for login and account creation.
 
@@ -72,20 +80,12 @@ modal.tsx: A reusable modal component used across the application for various pu
 account.tsx: Manages user account details and settings.
 
 **Content Browsing:**
-index.tsx: The main entry point and home page of the application.
-
-movies.tsx and tv.tsx: Components for displaying movie and TV show listings.
-
-search.tsx: Implements the search functionality.
+index.tsx: The main entry point and home page of the application.movies.tsx and tv.tsx: Components for displaying movie and TV show listings. search.tsx: Implements the search functionality.
 
 **Theming:** Themed.tsx: Handles theming and styling of the application components.
-
 **My List:** my-list.tsx: Component for managing and displaying the user's personal list of favorite movies and TV shows.
-
 **API Integration:** api.ts: Contains the logic for interacting with external APIs to fetch content data.
-
 **Type Definitions:** index.d.ts: TypeScript definitions to ensure type safety throughout the application.
-
 **Configuration:** package.json: Contains the project configuration, dependencies, and scripts for building and running the application.
 
 
