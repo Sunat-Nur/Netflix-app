@@ -41,9 +41,13 @@ Built with responsive design principles to ensure usability on various devices i
 **Frontend:**
 
 **React Native:** The core framework used for building the user interface.
+
 **Expo:** Managed workflow to streamline the development and deployment process.
+
 **TailwindCSS:** For styling the components with utility-first CSS framework.
+
 **Axios:** For making HTTP requests to fetch data from the API.
+
 **React Navigation:** For navigation and routing within the app.
 
 
@@ -53,22 +57,29 @@ Built with responsive design principles to ensure usability on various devices i
 
 
 **Firebase:** Used for authentication, real-time database, and cloud storage.
+
 **API Integration:** Integration with external APIs to fetch movie and TV show data.
+
 **State Management:**
 **Context API:** For managing global state across the application.
 
 **Validation:**
+
 **Yup and Formik:** For form validation and handling form state.
 
 **Authentication:**
+
 **auth.tsx:** Handles the authentication logic including sign-in and sign-up processes.login-account.tsx and create-account.tsx: UI components for login and account creation.
 
 **Layout:**
 _layout.tsx: The main layout component that wraps around the application components to provide a consistent layout.
+
 **Modal:**
 modal.tsx: A reusable modal component used across the application for various purposes such as alerts and confirmations.
+
 **Account Management:**
 account.tsx: Manages user account details and settings.
+
 **Content Browsing:**
 index.tsx: The main entry point and home page of the application.movies.tsx and tv.tsx: Components for displaying movie and TV show listings. search.tsx: Implements the search functionality.
 
