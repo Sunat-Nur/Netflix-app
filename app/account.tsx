@@ -12,11 +12,11 @@ import {TouchableOpacity} from "react-native-gesture-handler";
 import {LinearGradient} from "expo-linear-gradient";
 import {Entypo} from "@expo/vector-icons";
 import React, {useEffect, useState} from "react";
-import {Redirect, usePathname, useRouter} from "expo-router";
+import {Redirect, useRouter} from "expo-router";
 import {IAccount} from "@/types";
 import {deleteAccount, getAccounts} from "@/lip/firebase";
 import {useGlobalContext} from "@/context";
-import {isLoading} from "expo-font";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 export default function Account() {
     const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +43,7 @@ export default function Account() {
 
     const onDelete = async (id: string) => {
         try {
-            const isConfirm = await new Promise((resolve, reject) => {
+            const isConfirm = await new Promise((resolve) => {
                 Alert.alert(
                     "Delete account",
                     "Are you sure you want to delete this account?",
@@ -62,7 +62,9 @@ export default function Account() {
                 setIsLoading(true);
                 const res = await deleteAccount(id);
                 if (res.status) {
-                    const newAccounts = accounts.filter((account) => account._id !== id);
+                    const newAccounts = accounts.filter(
+                        (account) => account._id !== id
+                    );
                     setAccounts(newAccounts);
                     setIsLoading(false);
                 }
@@ -76,55 +78,22 @@ export default function Account() {
     if (account !== null) return <Redirect href={"/"}/>;
 
     return (
-        <View style={{flex: 1}}>
-            <SafeAreaView>
-                <Image
-                    source={require("../assets/images/netflix.png")}
-                    resizeMode="contain"
-                    style={{width: 150, height: 40}}
-                />
-            </SafeAreaView>
-            {isLoading ? (
-                <View style={styles.loadingWrapper}>
-                    <View style={styles.overlay}>
-                        <ActivityIndicator size="large" color="#fff"/>
-                    </View>
-                    {[1, 2].map((_, index) => (
-                        <View style={styles.account} key={index}>
-                            <Image
-                                resizeMode="contain"
-                                style={styles.profile}
-                                source={{uri: "https://tinyurl.com/5n7b72k3"}}
-                            />
-
-                            <View style={styles.profileInfo}>
-                                <Text
-                                    style={{color: "white", fontSize: 24, fontWeight: "bold"}}
-                                >
-                                    John Doe
-                                </Text>
-                                <TouchableOpacity style={styles.editBtn}>
-                                    <Text style={{color: "white", fontSize: 16}}>Delete</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <LinearGradient colors={["#3c3cb5", "#00d4ff"]} style={styles.go}>
-                                <TouchableOpacity>
-                                    <Entypo name="chevron-thin-right" size={36} color="white"/>
-                                </TouchableOpacity>
-                            </LinearGradient>
+        <GestureHandlerRootView style={{flex: 1}}>
+            <View style={{flex: 1}}>
+                <SafeAreaView>
+                    <Image
+                        source={require("../assets/images/netflix.png")}
+                        resizeMode="contain"
+                        style={{width: 150, height: 40}}
+                    />
+                </SafeAreaView>
+                {isLoading ? (
+                    <View style={styles.loadingWrapper}>
+                        <View style={styles.overlay}>
+                            <ActivityIndicator size="large" color="#fff"/>
                         </View>
-                    ))}
-                </View>
-            ) : (
-                <ScrollView
-                    contentContainerStyle={{flex: 1}}
-                    refreshControl={
-                        <RefreshControl onRefresh={getAllAccounts} refreshing={isLoading}/>
-                    }
-                >
-                    <View style={styles.wrapper}>
-                        {accounts.map((account) => (
-                            <View style={styles.account} key={account._id}>
+                        {[1, 2].map((_, index) => (
+                            <View style={styles.account} key={index}>
                                 <Image
                                     resizeMode="contain"
                                     style={styles.profile}
@@ -134,12 +103,9 @@ export default function Account() {
                                     <Text
                                         style={{color: "white", fontSize: 24, fontWeight: "bold"}}
                                     >
-                                        {account.name}
+                                        John Doe
                                     </Text>
-                                    <TouchableOpacity
-                                        style={styles.editBtn}
-                                        onPress={() => onDelete(account._id)}
-                                    >
+                                    <TouchableOpacity style={styles.editBtn}>
                                         <Text style={{color: "white", fontSize: 16}}>Delete</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -147,28 +113,72 @@ export default function Account() {
                                     colors={["#3c3cb5", "#00d4ff"]}
                                     style={styles.go}
                                 >
-                                    <TouchableOpacity
-                                        onPress={() =>
-                                            router.push(`/login-account?accountId=${account._id}`)
-                                        }
-                                    >
+                                    <TouchableOpacity>
                                         <Entypo name="chevron-thin-right" size={36} color="white"/>
                                     </TouchableOpacity>
                                 </LinearGradient>
                             </View>
                         ))}
-                        {accounts.length < 4 && (
-                            <TouchableOpacity
-                                style={styles.add}
-                                onPress={() => router.push("/create-account")}
-                            >
-                                <Text style={styles.addText}>Add account</Text>
-                            </TouchableOpacity>
-                        )}
                     </View>
-                </ScrollView>
-            )}
-        </View>
+                ) : (
+                    <ScrollView
+                        contentContainerStyle={{flex: 1}}
+                        refreshControl={
+                            <RefreshControl onRefresh={getAllAccounts} refreshing={isLoading}/>
+                        }
+                    >
+                        <View style={styles.wrapper}>
+                            {accounts.map((account) => (
+                                <View style={styles.account} key={account._id}>
+                                    <Image
+                                        resizeMode="contain"
+                                        style={styles.profile}
+                                        source={{uri: "https://tinyurl.com/5n7b72k3"}}
+                                    />
+                                    <View style={styles.profileInfo}>
+                                        <Text
+                                            style={{color: "white", fontSize: 24, fontWeight: "bold"}}
+                                        >
+                                            {account.name}
+                                        </Text>
+                                        <TouchableOpacity
+                                            style={styles.editBtn}
+                                            onPress={() => onDelete(account._id)}
+                                        >
+                                            <Text style={{color: "white", fontSize: 16}}>Delete</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <LinearGradient
+                                        colors={["#3c3cb5", "#00d4ff"]}
+                                        style={styles.go}
+                                    >
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                router.push(`/login-account?accountId=${account._id}`)
+                                            }
+                                        >
+                                            <Entypo
+                                                name="chevron-thin-right"
+                                                size={36}
+                                                color="white"
+                                            />
+                                        </TouchableOpacity>
+                                    </LinearGradient>
+                                </View>
+                            ))}
+                            {accounts.length < 4 && (
+                                <TouchableOpacity
+                                    style={styles.add}
+                                    onPress={() => router.push("/create-account")}
+                                >
+                                    <Text style={styles.addText}>Add account</Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    </ScrollView>
+                )}
+            </View>
+        </GestureHandlerRootView>
     );
 }
 

@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from "react";
-import {Text, View} from "@/components/Themed";
-import {popularMovies, topRatedMovies, trendingMovies} from "@/lip/api";
-import {IMovie} from "@/types";
+import React, { useEffect, useState } from "react";
+import { Text, View } from "@/components/Themed";
+import { popularMovies, topRatedMovies, trendingMovies } from "@/lip/api";
+import { IMovie } from "@/types";
 import Banner from "../../components/shared/banner";
-import {ScrollView, StyleSheet} from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import MovieCard from "@/components/card/movie-card";
 import Loader from "../../components/shared/loader";
-import {isLoading} from "expo-font";
-import {Redirect, useRouter} from "expo-router";
-import {useGlobalContext} from "@/context";
+import { Redirect } from "expo-router";
+import { useGlobalContext } from "@/context";
 
 export default function Index() {
     const [trending, setTrending] = useState<IMovie[]>([]);
@@ -16,65 +15,61 @@ export default function Index() {
     const [popular, setPopular] = useState<IMovie[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const {user, account} = useGlobalContext();
+    const { user, account } = useGlobalContext();
 
     useEffect(() => {
-        getTrendingMovies();
-        getTopRatedMovies();
-        getPopularMovies();
+        fetchData();
     }, []);
 
-
-    const getTrendingMovies = async () => {
+    const fetchData = async () => {
         setIsLoading(true);
-        const trending = await trendingMovies();
-        setTrending(trending);
-        setIsLoading(false)
+        try {
+            const [trending, topRated, popular] = await Promise.all([
+                trendingMovies(),
+                topRatedMovies(),
+                popularMovies(),
+            ]);
+            setTrending(trending);
+            setTopRated(topRated);
+            setPopular(popular);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    }
-
-    const getTopRatedMovies = async () => {
-        const topRated = await topRatedMovies();
-        setTopRated(topRated);
-    }
-
-    const getPopularMovies = async () => {
-        const popular = await popularMovies();
-        setPopular(popular);
-    }
-
-
-    if (isLoading) return <Loader/>;
-    if (user === null) return <Redirect href={"/auth"}/>;
-    if (account === null) return <Redirect href={"/account"}/>;
+    if (isLoading) return <Loader />;
+    if (user === null) return <Redirect href={"/auth"} />;
+    if (account === null) return <Redirect href={"/account"} />;
 
     return (
         <ScrollView>
-            <View className="flex-1">
-                <Banner movies={trending}/>
+            <View style={{ flex: 1 }}>
+                <Banner movies={trending} />
 
                 <View style={styles.row}>
                     <View>
                         <Text style={styles.title}>Trending Movies</Text>
-                        <ScrollView horizontal contentContainerStyle={{gap: 15}}>
+                        <ScrollView horizontal contentContainerStyle={{ gap: 15 }}>
                             {trending.map((item) => (
-                                <MovieCard item={item} key={item.id}/>
+                                <MovieCard item={item} key={item.id} />
                             ))}
                         </ScrollView>
                     </View>
                     <View>
                         <Text style={styles.title}>Top Rated Movies</Text>
-                        <ScrollView horizontal contentContainerStyle={{gap: 15}}>
+                        <ScrollView horizontal contentContainerStyle={{ gap: 15 }}>
                             {topRated.map((item) => (
-                                <MovieCard item={item} key={item.id}/>
+                                <MovieCard item={item} key={item.id} />
                             ))}
                         </ScrollView>
                     </View>
                     <View>
                         <Text style={styles.title}>Popular Movies</Text>
-                        <ScrollView horizontal contentContainerStyle={{gap: 15}}>
+                        <ScrollView horizontal contentContainerStyle={{ gap: 15 }}>
                             {popular.map((item) => (
-                                <MovieCard item={item} key={item.id}/>
+                                <MovieCard item={item} key={item.id} />
                             ))}
                         </ScrollView>
                     </View>
@@ -83,7 +78,6 @@ export default function Index() {
         </ScrollView>
     );
 }
-
 
 const styles = StyleSheet.create({
     row: {

@@ -8,28 +8,28 @@ import {
     TextInput,
     TouchableOpacity,
 } from "react-native";
-import { Text, View } from "@/components/Themed";
-import { Formik } from "formik";
-import { createAccountSchema } from "@/lip/validation";
-import { useState } from "react";
-import { createAccount } from "@/lip/firebase";
-import { useGlobalContext } from "@/context";
-import { v4 as uuid } from "uuid";
+import {Text, View} from "@/components/Themed";
+import {Formik} from "formik";
+import {createAccountSchema} from "@/lip/validation";
+import {useState} from "react";
+import {createAccount} from "@/lip/firebase";
+import {useGlobalContext} from "@/context";
+import {v4 as uuid} from "uuid";
 import "react-native-get-random-values";
-import { useRouter } from "expo-router";
+import {useRouter} from "expo-router";
 
-const { height, width } = Dimensions.get("window");
+const {height, width} = Dimensions.get("window");
 
 export default function CreateAccount() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
     const router = useRouter();
-    const { user } = useGlobalContext();
+    const {user} = useGlobalContext();
 
     const onSubmit = async (values: { name: string; pin: string }) => {
         try {
-            const { name, pin } = values;
+            const {name, pin} = values;
             setIsLoading(true);
             const res = await createAccount({
                 name,
@@ -52,9 +52,9 @@ export default function CreateAccount() {
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             <KeyboardAvoidingView
-                style={{ height }}
+                style={{height}}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
                 <View style={styles.wrapper}>
@@ -67,7 +67,7 @@ export default function CreateAccount() {
                         )}
                         <Formik
                             onSubmit={onSubmit}
-                            initialValues={{ name: "", pin: "" }}
+                            initialValues={{name: "", pin: ""}}
                             validationSchema={createAccountSchema}
                         >
                             {({
@@ -93,7 +93,7 @@ export default function CreateAccount() {
                                         style={styles.input}
                                     />
                                     {errors.name && touched.name && (
-                                        <Text style={{ color: "red", marginTop: 5 }}>
+                                        <Text style={{color: "red", marginTop: 5}}>
                                             {errors.name}
                                         </Text>
                                     )}
@@ -109,7 +109,7 @@ export default function CreateAccount() {
                                         secureTextEntry
                                     />
                                     {errors.pin && touched.pin && (
-                                        <Text style={{ color: "red", marginTop: 5 }}>
+                                        <Text style={{color: "red", marginTop: 5}}>
                                             {errors.pin}
                                         </Text>
                                     )}
@@ -120,7 +120,7 @@ export default function CreateAccount() {
                                         style={styles.formButton}
                                     >
                                         {isLoading ? (
-                                            <ActivityIndicator color={"white"} />
+                                            <ActivityIndicator color={"white"}/>
                                         ) : (
                                             <Text style={styles.textButton}>Save</Text>
                                         )}
