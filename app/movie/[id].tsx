@@ -4,7 +4,7 @@ import {
     useLocalSearchParams,
     useRouter,
 } from "expo-router";
-import { Text, View } from "@/components/Themed";
+import {Text, View} from "@/components/Themed";
 import {
     ActivityIndicator,
     Alert,
@@ -21,18 +21,18 @@ import {
     movieDetails,
     similarMovies,
 } from "@/lip/api";
-import { useEffect, useState } from "react";
-import { IActor, IMovie } from "@/types";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import {useEffect, useState} from "react";
+import {IActor, IMovie} from "@/types";
+import {AntDesign, Ionicons} from "@expo/vector-icons";
 import Loader from "../../components/shared/loader";
-import { LinearGradient } from "expo-linear-gradient";
+import {LinearGradient} from "expo-linear-gradient";
 import ActorCard from "../../components/card/actor-card";
 import MovieCard from "../../components/card/movie-card";
-import { createList } from "@/lip/firebase";
-import { useGlobalContext } from "@/context";
+import {createList} from "@/lip/firebase";
+import {useGlobalContext} from "@/context";
 import Toast from "react-native-toast-message";
 
-const { width, height } = Dimensions.get("window");
+const {width, height} = Dimensions.get("window");
 
 export default function MovieDetail() {
     const [movie, setMovie] = useState<IMovie | null>(null);
@@ -41,13 +41,13 @@ export default function MovieDetail() {
     const [movies, setMovies] = useState<IMovie[]>([]);
     const [isAdding, setIsAdding] = useState(false);
 
-    const { id } = useGlobalSearchParams();
+    const {id} = useGlobalSearchParams();
     const local = useLocalSearchParams();
 
     const type = local.type == "tv" ? "tv" : "movie";
 
     const router = useRouter();
-    const { account } = useGlobalContext();
+    const {account} = useGlobalContext();
 
     useEffect(() => {
         getMovieDetail();
@@ -99,8 +99,8 @@ export default function MovieDetail() {
 
     return (
         <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            style={{flex: 1}}
+            contentContainerStyle={{paddingBottom: 20}}
         >
             <View style={styles.container}>
                 {isAdding && (
@@ -115,14 +115,14 @@ export default function MovieDetail() {
                             backgroundColor: "rgba(0,0,0,.6)",
                         }}
                     >
-                        <ActivityIndicator />
+                        <ActivityIndicator/>
                     </View>
                 )}
-                <Stack.Screen options={{ headerShown: false }} />
+                <Stack.Screen options={{headerShown: false}}/>
                 <SafeAreaView style={styles.header}>
                     <View style={styles.headerLogo}>
                         <TouchableOpacity onPress={() => router.back()}>
-                            <Ionicons name="arrow-back-circle" size={40} color="white" />
+                            <Ionicons name="arrow-back-circle" size={40} color="white"/>
                         </TouchableOpacity>
                         <Image
                             source={require("../../assets/images/netflix.png")}
@@ -132,18 +132,18 @@ export default function MovieDetail() {
                     </View>
 
                     <TouchableOpacity onPress={addList}>
-                        <AntDesign name="heart" size={40} color="red" />
+                        <AntDesign name="heart" size={40} color="red"/>
                     </TouchableOpacity>
                 </SafeAreaView>
                 {isLoading ? (
-                    <View style={{ height: height }}>
-                        <Loader />
+                    <View style={{height: height}}>
+                        <Loader/>
                     </View>
                 ) : (
                     <View>
                         <Image
-                            source={{ uri: `${image500(movie?.poster_path)}` }}
-                            style={{ width: width, height: height * 0.7, zIndex: -1 }}
+                            source={{uri: `${image500(movie?.poster_path)}`}}
+                            style={{width: width, height: height * 0.7, zIndex: -1}}
                         />
                         <LinearGradient
                             colors={["transparent", "rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 1)"]}
@@ -153,8 +153,8 @@ export default function MovieDetail() {
                                 position: "absolute",
                                 bottom: 0,
                             }}
-                            start={{ x: 0.5, y: 0 }}
-                            end={{ x: 0.5, y: 1 }}
+                            start={{x: 0.5, y: 0}}
+                            end={{x: 0.5, y: 1}}
                         />
                     </View>
                 )}
@@ -182,10 +182,10 @@ export default function MovieDetail() {
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 15 }}
+                        contentContainerStyle={{paddingHorizontal: 15}}
                     >
                         {actors?.map((actor, idx) => (
-                            <ActorCard key={actor.id} actor={actor} />
+                            <ActorCard key={actor.id} actor={actor}/>
                         ))}
                     </ScrollView>
                 </View>
@@ -195,11 +195,11 @@ export default function MovieDetail() {
                 <Text style={styles.actorTitle}>Similar movies</Text>
                 <ScrollView
                     horizontal
-                    contentContainerStyle={{ gap: 15 }}
+                    contentContainerStyle={{gap: 15}}
                     showsHorizontalScrollIndicator={false}
                 >
                     {movies.map((item) => (
-                        <MovieCard item={item} key={item.id} />
+                        <MovieCard item={item} key={item.id}/>
                     ))}
                 </ScrollView>
             </View>
