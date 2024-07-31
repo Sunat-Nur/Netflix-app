@@ -13,7 +13,7 @@ import {
 import {Text, View} from "@/components/Themed";
 import {Dispatch, useState} from "react";
 import {Formik} from "formik";
-// import { loginSchema, registerSchema } from "../lib/validation";
+import {loginSchema, registerSchema} from "@/lip/validation";
 import {
     createUserWithEmailAndPassword,
     inMemoryPersistence,
@@ -21,13 +21,12 @@ import {
     signInWithEmailAndPassword,
     updateProfile,
 } from "firebase/auth";
-import {auth} from "@/lip/firebase";
+import {auth, db} from "@/lip/firebase";
 import {Redirect, useRouter} from "expo-router";
 import {addDoc, collection} from "firebase/firestore";
 import {useGlobalContext} from "@/context";
 
 const {height} = Dimensions.get("window");
-
 
 export default function Auth() {
     const [state, setstate] = useState<"login" | "register">("login");
@@ -35,7 +34,6 @@ export default function Auth() {
     const {user} = useGlobalContext();
 
     if (user !== null) return <Redirect href={"/account"}/>;
-
 
     return (
         <View style={{flex: 1}}>
@@ -61,8 +59,8 @@ export default function Auth() {
                 >
                     <View style={styles.wrapper}>
                         <View style={styles.form}>
-                            {state === "login" && <Login  />}
-                            {state === "register" && <Register  />}
+                            {state === "login" && <Login setstate={setstate}/>}
+                            {state === "register" && <Register setstate={setstate}/>}
                         </View>
                     </View>
                 </KeyboardAvoidingView>
@@ -71,23 +69,245 @@ export default function Auth() {
     );
 }
 
+interface Props {
+    setstate: Dispatch<React.SetStateAction<"login" | "register">>;
+}
 
-function Login() {
+function Login({setstate}: Props) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const router = useRouter();
+
+    const onSubmit = async (values: { email: string; password: string }) => {
+        try {
+            setIsLoading(true);
+            const {email, password} = values;
+            const res = await signInWithEmailAndPassword(auth, email, password);
+            if (res.user.uid) {
+                setIsLoading(false);
+                setError("");
+                router.push("/account");
+            }
+        } catch (error) {
+            const result = error as Error;
+            setError(result.message);
+            setIsLoading(false);
+        }
+    };
+
     return (
         <View>
-            <Text>Login</Text>
+            <Text style={styles.title}>Sign In</Text>
+            <Formik
+                initialValues={{email: "", password: ""}}
+                onSubmit={onSubmit}
+                validationSchema={loginSchema}
+            >
+                {({
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      values,
+                      errors,
+                      touched,
+                  }) => (
+                    <View style={{flexDirection: "column"}}>
+                        {error && (
+                            <View style={styles.alert}>
+                                <Text style={styles.alertText}>{error}</Text>
+                            </View>
+                        )}
+                        <TextInput
+                            onChangeText={handleChange("email")}
+                            onBlur={handleBlur("email")}
+                            value={values.email}
+                            placeholder="Enter your email"
+                            placeholderTextColor="gray"
+                            style={styles.input}
+                        />
+                        {errors.email && touched.email && (
+                            <Text style={{color: "red", marginTop: 5}}>{errors.email}</Text>
+                        )}
+                        <TextInput
+                            onChangeText={handleChange("password")}
+                            onBlur={handleBlur("password")}
+                            value={values.password}
+                            placeholder="Password"
+                            placeholderTextColor="gray"
+                            style={styles.input}
+                            secureTextEntry
+                        />
+                        {errors.password && touched.password && (
+                            <Text style={{color: "red", marginTop: 5}}>
+                                {errors.password}
+                            </Text>
+                        )}
+                        {/* @ts-ignore */}
+                        <TouchableOpacity onPress={handleSubmit} style={styles.formButton}>
+                            {isLoading ? (
+                                <ActivityIndicator color={"white"}/>
+                            ) : (
+                                <Text style={styles.textButton}>Login</Text>
+                            )}
+                        </TouchableOpacity>
+
+                        <View style={styles.bottomContent}>
+                            <Text>New to Netflix?</Text>
+                            <TouchableOpacity onPress={() => setstate("register")}>
+                                <Text style={{color: "lightblue", fontWeight: "bold"}}>
+                                    Sign Up
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+            </Formik>
         </View>
     );
 }
 
-function Register() {
+function Register({setstate}: Props) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const router = useRouter();
+
+    const onSubmit = async (values: {
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+    }) => {
+        try {
+            setIsLoading(true);
+            const {email, password, firstName, lastName} = values;
+            const res = await createUserWithEmailAndPassword(auth, email, password);
+            updateProfile(res.user, {
+                displayName: `${firstName} ${lastName}`,
+            });
+            addDoc(collection(db, "users"), {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                uid: res.user.uid,
+                list: [],
+            });
+            if (res.user.uid) {
+                setIsLoading(false);
+                setError("");
+                router.push("/account");
+            }
+        } catch (error) {
+            const result = error as Error;
+            setError(result.message);
+            setIsLoading(false);
+        }
+    };
+
     return (
         <View>
-            <Text>Register</Text>
+            <Text style={styles.title}>Sign Up</Text>
+
+            <Formik
+                initialValues={{email: "", password: "", firstName: "", lastName: ""}}
+                onSubmit={onSubmit}
+                validationSchema={registerSchema}
+            >
+                {({
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      values,
+                      errors,
+                      touched,
+                  }) => (
+                    <View style={{flexDirection: "column"}}>
+                        {error && (
+                            <View style={styles.alert}>
+                                <Text style={styles.alertText}>{error}</Text>
+                            </View>
+                        )}
+                        <View style={{flexDirection: "row"}}>
+                            <View style={{width: "48%"}}>
+                                <TextInput
+                                    onChangeText={handleChange("firstName")}
+                                    onBlur={handleBlur("firstName")}
+                                    value={values.firstName}
+                                    placeholder="First Name"
+                                    placeholderTextColor="gray"
+                                    style={styles.input}
+                                />
+                                {errors.firstName && touched.firstName && (
+                                    <Text style={{color: "red", marginTop: 5}}>
+                                        {errors.firstName}
+                                    </Text>
+                                )}
+                            </View>
+                            <View style={{width: "48%"}}>
+                                <TextInput
+                                    onChangeText={handleChange("lastName")}
+                                    onBlur={handleBlur("lastName")}
+                                    value={values.lastName}
+                                    placeholder="Last Name"
+                                    placeholderTextColor="gray"
+                                    style={styles.input}
+                                />
+                                {errors.lastName && touched.lastName && (
+                                    <Text style={{color: "red", marginTop: 5}}>
+                                        {errors.lastName}
+                                    </Text>
+                                )}
+                            </View>
+                        </View>
+                        <TextInput
+                            onChangeText={handleChange("email")}
+                            onBlur={handleBlur("email")}
+                            value={values.email}
+                            placeholder="Enter your email"
+                            placeholderTextColor="gray"
+                            style={styles.input}
+                        />
+                        {errors.email && touched.email && (
+                            <Text style={{color: "red", marginTop: 5}}>{errors.email}</Text>
+                        )}
+                        <TextInput
+                            onChangeText={handleChange("password")}
+                            onBlur={handleBlur("password")}
+                            value={values.password}
+                            placeholder="Password"
+                            placeholderTextColor="gray"
+                            style={styles.input}
+                            secureTextEntry
+                        />
+                        {errors.password && touched.password && (
+                            <Text style={{color: "red", marginTop: 5}}>
+                                {errors.password}
+                            </Text>
+                        )}
+                        {/* @ts-ignore */}
+                        <TouchableOpacity onPress={handleSubmit} style={styles.formButton}>
+                            {isLoading ? (
+                                <ActivityIndicator color={"white"}/>
+                            ) : (
+                                <Text style={styles.textButton}>Register</Text>
+                            )}
+                        </TouchableOpacity>
+
+                        <View style={styles.bottomContent}>
+                            <Text>Already have an account?</Text>
+                            <TouchableOpacity onPress={() => setstate("login")}>
+                                <Text style={{color: "lightblue", fontWeight: "bold"}}>
+                                    Sign In
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+            </Formik>
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     overlay: {

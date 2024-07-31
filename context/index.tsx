@@ -1,8 +1,8 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {ChildProps, IAccount, IContext, IUser} from "@/types";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { auth } from "../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import {useRouter} from "expo-router";
+import {auth} from "@/lip/firebase";
 
 const Context = createContext<IContext | null>(null);
 
