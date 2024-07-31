@@ -83,9 +83,13 @@ account.tsx: Manages user account details and settings.
 index.tsx: The main entry point and home page of the application.movies.tsx and tv.tsx: Components for displaying movie and TV show listings. search.tsx: Implements the search functionality.
 
 **Theming:** Themed.tsx: Handles theming and styling of the application components.
+
 **My List:** my-list.tsx: Component for managing and displaying the user's personal list of favorite movies and TV shows.
+
 **API Integration:** api.ts: Contains the logic for interacting with external APIs to fetch content data.
+
 **Type Definitions:** index.d.ts: TypeScript definitions to ensure type safety throughout the application.
+
 **Configuration:** package.json: Contains the project configuration, dependencies, and scripts for building and running the application.
 
 
