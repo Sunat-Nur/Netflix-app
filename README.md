@@ -63,11 +63,11 @@ Built with responsive design principles to ensure usability on various devices i
 **State Management:**
 **Context API:** For managing global state across the application.
 
-**Validation:**
+## Validation:
 
 **Yup and Formik:** For form validation and handling form state.
 
-**Authentication:**
+## Authentication:
 
 **auth.tsx:** Handles the authentication logic including sign-in and sign-up processes.login-account.tsx and create-account.tsx: UI components for login and account creation.
 
@@ -136,6 +136,6 @@ can open this project in all devices
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Expo Go](https://expo.dev/go),
 
 
