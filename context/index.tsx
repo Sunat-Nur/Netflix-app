@@ -1,8 +1,8 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {ChildProps, IAccount, IContext, IUser} from "@/types";
-import { onAuthStateChanged } from "firebase/auth";
-import {useRouter} from "expo-router";
+import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "@/lip/firebase";
+import {useRouter} from "expo-router";
 
 const Context = createContext<IContext | null>(null);
 
@@ -34,7 +34,6 @@ export const Provider = ({children}: ChildProps) => {
         </Context.Provider>
     );
 };
-
 
 export const useGlobalContext = () => {
     const context = useContext(Context);

@@ -23,8 +23,8 @@ import Loader from "../../components/shared/loader";
 import {LinearGradient} from "expo-linear-gradient";
 import ActorCard from "../../components/card/actor-card";
 import MovieCard from "../../components/card/movie-card";
-// import {createList} from "../../lib/firebase";
-// import {useGlobalContext} from "../../context";
+import {createList} from "@/lip/firebase";
+import {useGlobalContext} from "@/context";
 import Toast from "react-native-toast-message";
 
 const {width, height} = Dimensions.get("window");
